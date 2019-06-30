@@ -17,9 +17,9 @@ defmodule CommandLine.CLI do
   end
 
   def add_directories_to_github([repo | _the_rest], current_path) do
-    IO.inspect "#{current_path}/#{repo}"
     File.cd!("#{current_path}/#{repo}", fn () -> 
-      System.cmd("git", ["remote", "set-url", "origin", "git@github.com:programming-notes/#{repo}.git"]) 
+      System.cmd("git", ["remote", "set-url", "origin", "git@github.com:programming-notes/#{repo}.git"])
+      System.cmd("git", ["push", "origin", "master"]) 
     end)
   end
 end

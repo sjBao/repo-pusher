@@ -24,3 +24,5 @@ repo_pusher-*.tar
 
 repo_pusher
 
+/config/*secret.exs
+

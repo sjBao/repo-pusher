@@ -1,21 +1,11 @@
 # RepoPusher
 
-**TODO: Add description**
+This is a command line script written in elixir to mass push git repositories to an organization. In the current version, you'd have to change the github urls in `CommandLine.CLI`. Future iterations of this project should allow you to put the org name as well as take advantage of OTP supervisors to ensure all repos are pushed (or at the very least report the failure).
+****
 
 ## Installation
-
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `repo_pusher` to your list of dependencies in `mix.exs`:
-
-```elixir
-def deps do
-  [
-    {:repo_pusher, "~> 0.1.0"}
-  ]
-end
-```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/repo_pusher](https://hexdocs.pm/repo_pusher).
-
+* clone and `cd` into this repository.
+* `$ mix deps.get`
+* `$ mix escripts.build`
+* Now you can run the executable script by running: `$ ./repo_push <arg1>`
+* `arg1` is the *absolute path* containing the repos that you want to mass push

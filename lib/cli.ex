@@ -8,7 +8,7 @@ defmodule CommandLine.CLI do
   end
 
   def list_files(path) do
-    System.cmd("ls", [path, "-1 -d \"$PWD\"*"])
+    System.cmd("ls", [path])
   end
 
   def parse_directories({ directories, _ }) do

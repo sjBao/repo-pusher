@@ -35,7 +35,7 @@ defmodule CommandLine.CLI do
       end)
     end
     :timer.sleep(1000)
-    add_directories_to_github(the_rest, repos_dir)
+    add_directories_to_github(the_rest, repos_dir, org_name)
   end
 
 

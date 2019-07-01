@@ -7,4 +7,5 @@ This is a command line script written in elixir to mass push git repositories to
 * clone and `cd` into this repository.
 * `$ mix deps.get`
 * `$ mix escripts.build`
-* Now you can run the executable script by running: `$ ./repo_push <absolute_path_of_directory_containing_repos_to_be_pushed>`
+* Now you can run the executable script by running: `$ ./repo_push <arg1>`
+* `arg1` is the *absolute path* containing the repos that you want to mass push

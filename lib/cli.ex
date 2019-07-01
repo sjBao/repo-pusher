@@ -1,10 +1,10 @@
 defmodule CommandLine.CLI do
-  def main([path | _opts]) do
-    path
+  def main([repos_dir, org_name | _opts]) do
+    repos_dir
     |> String.trim
     |> list_files
     |> parse_directories
-    |> add_directories_to_github(path)
+    |> add_directories_to_github(repos_dir, org_name)
   end
 
   def list_files(path) do
@@ -16,45 +16,36 @@ defmodule CommandLine.CLI do
     |> String.split("\n")
   end
 
-  def add_directories_to_github([], _current_path) do
+  def add_directories_to_github([], _, _) do
     IO.inspect "Finished"
   end
 
-  def add_directories_to_github([repo | the_rest], current_path) do
-    task = Task.async fn () ->
-      File.cd!("#{current_path}/#{repo}", fn () ->
-        IO.inspect "Pushing to #{current_path}/#{repo}"
+  def add_directories_to_github([""], _, _) do
+    IO.inspect "Finished"
+  end
+
+  def add_directories_to_github([repo | the_rest], repos_dir, org_name) do
+    Task.start fn () ->
+      File.cd!("#{repos_dir}/#{repo}", fn () ->
+        IO.inspect "Initating push of #{repos_dir}/#{repo}... to https://github.com/#{org_name}"
         repo
-        |> set_remote_url
-        |> create_remote_repo
+        |> set_remote_url(org_name)
+        |> GithubAdapter.create_remote_repo(org_name)
         |> push_to_remote
       end)
     end
-    Task.await(task)
-    add_directories_to_github(the_rest, current_path)
+    :timer.sleep(1000)
+    add_directories_to_github(the_rest, repos_dir, org_name)
   end
 
-  def set_remote_url(repo) do
-    System.cmd("git", ["remote", "set-url", "origin", "git@github.com:programming-notes/#{repo}.git"])
+
+
+  defp set_remote_url(repo, org_name) do
+    System.cmd("git", ["remote", "set-url", "origin", "git@github.com:#{org_name}/#{repo}.git"])
     repo
   end
 
-  def push_to_remote(_repo) do
+  defp push_to_remote(_repo) do
     System.cmd("git", ["push", "origin", "master"]) 
-  end
-
-  def create_remote_repo(repo) do
-    HTTPoison.post(
-      "https://api.github.com/orgs/programming-notes/repos", 
-      Jason.encode!(%{
-        name: repo,
-        private: false,
-        has_issues: true,
-        has_projects: false,
-        has_wiki: false
-      }),
-      [{"Authorization", "token #{System.get_env("GIT_TOKEN")}"}]
-    )
-    repo
   end
 end
